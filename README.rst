@@ -8,7 +8,7 @@ Python 3.5.1
 ### install
 enter below commands
 
-```sudo pip install git+https://github.com/PinkPhayate/OddsWatcher```
+```sudo pip install git+https://github.com/PinkPhayate/oddsman```
 
 ### how to use
 ```
