@@ -106,6 +106,8 @@ class OddsWatcher(object):
         dict = {}
         for d in self.__scrape_race_id(source):
             dict.update(d)
-        print(dict)
-        # df, time_df = self.__scrape_race_id(source)
-        # print(df, time_df)
+        return dict
+
+    def get_sorted_race_ids(self, date):
+        race_ids = self.get_race_ids(date)
+        return sorted(race_ids.items(), key=lambda x: x[0])
