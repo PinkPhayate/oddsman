@@ -52,7 +52,7 @@ class OddsWatcher(object):
         df = []
         # Extract status
         title = soup.find('h1')
-        print(title.text)
+        # print(title.text)
         self.title = title.text
         # if title.text is not correct (e.g. another race), remove
         table = soup.find(class_='race_table_old nk_tb_common')
@@ -110,7 +110,7 @@ class OddsWatcher(object):
         url = 'http://race.netkeiba.com/?pid=race_old&id=c' + str(race_id)
         source = self.__get_request_via_get(url)
         self.df = self.__scrape_race_info(source)
-        odds_list = [x[10] for x in self.df if len(x) > 0]
+        odds_list = [x[9] for x in self.df if len(x) > 0]
         return odds_list
 
     def get_race_ids(self, date):
@@ -133,7 +133,6 @@ class OddsWatcher(object):
         times_str = list(dict.keys())
         sorted_times_list = sorted(times_str, key=lambda x: x.replace(':', ''))
         now_time = self.__get_now_time()
-        print('now_time: ' + now_time)
         return [x for x in sorted_times_list if int(now_time) < int(x.replace(':', ''))]
 
     def get_nearest_odds(self):
