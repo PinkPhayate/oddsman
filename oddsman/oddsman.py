@@ -1,6 +1,6 @@
 from bs4 import BeautifulSoup
 from urllib import request
-
+from datetime import datetime, date
 
 class OddsWatcher(object):
     def __get_request_via_get(self, url):
@@ -90,7 +90,21 @@ class OddsWatcher(object):
             time_df.append(times)
             dict = self.__2dict(row, times)
             yield dict
-        # return df, time_df
+
+    def __formalize(self, str):
+        return ('0'+str) if len(str) == 1 else str
+
+    def __get_today_data(self):
+        dt = datetime.now()
+        month = self.__formalize(str(dt.month))
+        day = self.__formalize(str(dt.day))
+        return month + day
+
+    def __get_now_time(self):
+        dt = datetime.now()
+        hour = self.__formalize(str(dt.hour))
+        minute = self.__formalize(str(dt.minute))
+        return hour + minute
 
     def get_race_odds(self, race_id):
         url = 'http://race.netkeiba.com/?pid=race_old&id=c' + str(race_id)
@@ -100,8 +114,8 @@ class OddsWatcher(object):
         return odds_list
 
     def get_race_ids(self, date):
-        # url = 'http://race.netkeiba.com/?pid=race_list&id=c' + str(date)
-        url = 'http://race.netkeiba.com/?pid=race_list&id=p' + str(date)
+        # まだ開催されていないレースがc、開催終わってる日はp？？?
+        url = 'http://race.netkeiba.com/?pid=race_list&id=c' + str(date)
         source = self.__get_request_via_get(url)
         dict = {}
         for d in self.__scrape_race_id(source):
@@ -111,3 +125,17 @@ class OddsWatcher(object):
     def get_sorted_race_ids(self, date):
         race_ids = self.get_race_ids(date)
         return sorted(race_ids.items(), key=lambda x: x[0])
+
+    def get_later_race_ids(self):
+        today_data = self.__get_today_data()
+        print('today_data: ' + today_data)
+        dict = self.get_race_ids(today_data)
+        if dict is None:
+            # TODO
+            print('today has not race.')
+            return
+        times_str = list(dict.keys())
+        sorted_times_list = sorted(times_str, key=lambda x: x.replace(':', ''))
+        now_time = self.__get_now_time()
+        print('now_time: ' + now_time)
+        return [x for x in sorted_times_list if int(now_time) < int(x.replace(':', ''))]
