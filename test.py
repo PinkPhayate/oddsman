@@ -1,7 +1,8 @@
 from oddsman import oddsman
 
+
 ow = oddsman.OddsWatcher()
-dict = ow.get_race_ids('0701')
-dict = ow.get_sorted_race_ids('0701')
-list = ow.get_later_race_ids()
-print(list)
+later_race_ids = ow.get_later_race_ids()
+print(later_race_ids)
+odds = ow.get_nearest_odds()
+print(odds)

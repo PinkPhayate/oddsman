@@ -126,16 +126,21 @@ class OddsWatcher(object):
         race_ids = self.get_race_ids(date)
         return sorted(race_ids.items(), key=lambda x: x[0])
 
-    def get_later_race_ids(self):
-        today_data = self.__get_today_data()
-        print('today_data: ' + today_data)
-        dict = self.get_race_ids(today_data)
+    def get_later_race_ids(self, dict=None):
         if dict is None:
-            # TODO
-            print('today has not race.')
-            return
+            today_data = self.__get_today_data()
+            dict = self.get_race_ids(today_data)
         times_str = list(dict.keys())
         sorted_times_list = sorted(times_str, key=lambda x: x.replace(':', ''))
         now_time = self.__get_now_time()
         print('now_time: ' + now_time)
         return [x for x in sorted_times_list if int(now_time) < int(x.replace(':', ''))]
+
+    def get_nearest_odds(self):
+        today_data = self.__get_today_data()
+        dict = self.get_race_ids(today_data)
+        if dict is None:
+            # TODO
+            return
+        list = self.get_later_race_ids(dict=dict)
+        return self.get_race_odds(dict[list[0]])
