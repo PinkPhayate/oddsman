@@ -1,5 +1,9 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
 import oddsman
+
+print("Content-Type: text/plain")
+print()
+
 
 ow = oddsman.OddsWatcher()
 # レースIDの表示
