@@ -112,6 +112,32 @@ class OddsWatcher(object):
             dict[i+1] = list[i]
         return dict
 
+    def __get_later_race_ids(self, dict=None):
+        if dict is None:
+            today_data = self.__get_today_data()
+            dict = self.get_race_ids(today_data)
+        times_str = list(dict.keys())
+        sorted_times_list = sorted(times_str, key=lambda x: x.replace(':', ''))
+        now_time = self.__get_now_time()
+        return [x for x in sorted_times_list if int(now_time) < int(x.replace(':', '') if(':' in x) else 0)]
+
+    def __get_nearest_race_id(self):
+        # race_idを持っているdictは一日で一回で良い?
+        today_data = self.__get_today_data()
+        for i in range(1, 7):
+            data = str(int(today_data) + i)
+            dict = self.get_race_ids(data)
+            if 0 < len(dict):
+                break
+        else:
+            # TODO
+            print('[error] Could not find any race for a week')
+            return None
+        # このリストは時間によって変わるから
+        list = self.__get_later_race_ids(dict=dict)
+        if 0 < len(list):
+            return dict[list[0]]
+
     def get_race_odds(self, race_id):
         url = 'http://race.netkeiba.com/?pid=race_old&id=c' + str(race_id)
         source = self.__get_request_via_get(url)
@@ -126,8 +152,14 @@ class OddsWatcher(object):
         odds_list = [float(x[10]) for x in self.df if len(x) > 0]
         return odds_list
 
-    def get_race_history_sorted_odds_list(self, race_id):
-        odds_list = self.get_race_history_odds(race_id=race_id)
+    def get_race_history_sorted_odds_list(self, race_id=None):
+        # race_idの指定がない時は最新のレースidを持ってくる
+        if race_id is None:
+            # このrace_idはキャッシュしても良い。
+            race_id = self.__get_nearest_race_id()
+            odds_list = self.get_race_odds(race_id)
+        else:
+            odds_list = self.get_race_history_odds(race_id=race_id)
         dict = self.__to_dict(odds_list)
         return sorted(dict.items(), key=lambda x: x[1])
 
@@ -144,27 +176,3 @@ class OddsWatcher(object):
     def get_sorted_race_ids(self, date):
         race_ids = self.get_race_ids(date)
         return sorted(race_ids.items(), key=lambda x: x[0])
-
-    def get_later_race_ids(self, dict=None):
-        if dict is None:
-            today_data = self.__get_today_data()
-            dict = self.get_race_ids(today_data)
-        times_str = list(dict.keys())
-        sorted_times_list = sorted(times_str, key=lambda x: x.replace(':', ''))
-        now_time = self.__get_now_time()
-        return [x for x in sorted_times_list if int(now_time) < int(x.replace(':', '') if(':' in x) else 0)]
-
-    def get_nearest_odds(self):
-        today_data = self.__get_today_data()
-        for i in range(1,7):
-            data = str(int(today_data) + i)
-            dict = self.get_race_ids(data)
-            if 0 < len(dict):
-                break
-        else:
-            # TODO
-            print('[error] Could not find any race for a week')
-            return None
-        list = self.get_later_race_ids(dict=dict)
-        if 0 < len(list):
-            return self.get_race_odds(dict[list[0]])
