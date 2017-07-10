@@ -134,15 +134,19 @@ class OddsWatcher(object):
         times_str = list(dict.keys())
         sorted_times_list = sorted(times_str, key=lambda x: x.replace(':', ''))
         now_time = self.__get_now_time()
-        return [x for x in sorted_times_list if int(now_time) < int(x.replace(':', ''))]
+        return [x for x in sorted_times_list if int(now_time) < int(x.replace(':', '') if(':' in x) else 0)]
 
     def get_nearest_odds(self):
         today_data = self.__get_today_data()
-        dict = self.get_race_ids(today_data)
-        if 0 == len(dict):
+        for i in range(1,7):
+            data = str(int(today_data) + i)
+            dict = self.get_race_ids(data)
+            if 0 < len(dict):
+                break
+        else:
             # TODO
-            print('[error] Could not find any race at: ' + today_data)
-            return
+            print('[error] Could not find any race for a week')
+            return None
         list = self.get_later_race_ids(dict=dict)
         if 0 < len(list):
             return self.get_race_odds(dict[list[0]])
