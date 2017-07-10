@@ -13,6 +13,10 @@ ow = oddsman.OddsWatcher()
 # odds = ow.get_nearest_odds()
 # print(odds)
 
-
+# 馬番順のオッズを返す
 odds_list = ow.get_race_history_odds('201707030312')
+print(odds_list)
+
+# 馬番とオッズのリストがオッズでソートして返す
+odds_list = ow.get_race_history_sorted_odds_list('201707030312')
 print(odds_list)

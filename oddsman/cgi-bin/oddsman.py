@@ -106,19 +106,30 @@ class OddsWatcher(object):
         minute = self.__formalize(str(dt.minute))
         return hour + minute
 
+    def __to_dict(self, list):
+        dict = {}
+        for i in range(len(list)):
+            dict[i+1] = list[i]
+        return dict
+
     def get_race_odds(self, race_id):
         url = 'http://race.netkeiba.com/?pid=race_old&id=c' + str(race_id)
         source = self.__get_request_via_get(url)
         self.df = self.__scrape_race_info(source)
-        odds_list = [x[9] for x in self.df if len(x) > 0]
+        odds_list = [float(x[9]) for x in self.df if len(x) > 0]
         return odds_list
 
     def get_race_history_odds(self, race_id):
         url = 'http://race.netkeiba.com/?pid=race_old&id=c' + str(race_id)
         source = self.__get_request_via_get(url)
         self.df = self.__scrape_race_info(source)
-        odds_list = [x[10] for x in self.df if len(x) > 0]
+        odds_list = [float(x[10]) for x in self.df if len(x) > 0]
         return odds_list
+
+    def get_race_history_sorted_odds_list(self, race_id):
+        odds_list = self.get_race_history_odds(race_id=race_id)
+        dict = self.__to_dict(odds_list)
+        return sorted(dict.items(), key=lambda x: x[1])
 
     def get_race_ids(self, date):
         # まだ開催されていないレースがc、開催終わってる日はp？？?
