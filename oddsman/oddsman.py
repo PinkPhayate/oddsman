@@ -116,6 +116,7 @@ class OddsWatcher(object):
     def get_race_ids(self, date):
         # まだ開催されていないレースがc、開催終わってる日はp？？?
         url = 'http://race.netkeiba.com/?pid=race_list&id=c' + str(date)
+        print('[info] request: ' + url)
         source = self.__get_request_via_get(url)
         dict = {}
         for d in self.__scrape_race_id(source):
@@ -138,8 +139,10 @@ class OddsWatcher(object):
     def get_nearest_odds(self):
         today_data = self.__get_today_data()
         dict = self.get_race_ids(today_data)
-        if dict is None:
+        if 0 == len(dict):
             # TODO
+            print('[error] Could not find any race at: ' + today_data)
             return
         list = self.get_later_race_ids(dict=dict)
-        return self.get_race_odds(dict[list[0]])
+        if 0 < len(list):
+            return self.get_race_odds(dict[list[0]])
