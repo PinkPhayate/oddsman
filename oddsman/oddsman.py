@@ -141,7 +141,9 @@ class OddsWatcher(object):
         times_str = list(dict.keys())
         sorted_times_list = sorted(times_str, key=lambda x: x.replace(':', ''))
         now_time = self.__get_now_time()
-        return [x for x in sorted_times_list if int(now_time) < int(x.replace(':', '') if(':' in x) else 0)]
+        time_list = [x for x in sorted_times_list if int(now_time) < int(x.replace(':', '') if(':' in x) else 0)]
+        return dict[time_list[0]]
+        # return [x for x in sorted_times_list if int(now_time) < int(x.replace(':', '') if(':' in x) else 0)]
 
     def get_nearest_odds(self):
         today_data = self.__get_today_data()
