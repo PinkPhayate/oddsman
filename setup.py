@@ -5,7 +5,7 @@ with open('README.md', encoding='utf-8') as f:
 
 setup(
     name='oddsman',
-    version='0.0.1',
+    version='0.0.2',
     author='PinkPhayate',
     author_email='pinqphayate@gmail.com',
     url='https://github.com/PinkPhayate',
