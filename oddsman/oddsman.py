@@ -147,7 +147,7 @@ class OddsWatcher(object):
 
     def get_nearest_odds(self):
         today_data = self.__get_today_data()
-        for i in range(1,7):
+        for i in range(0,7):
             data = str(int(today_data) + i)
             dict = self.get_race_ids(data)
             if 0 < len(dict):
@@ -156,6 +156,6 @@ class OddsWatcher(object):
             # TODO
             print('[error] Could not find any race for a week')
             return None
-        list = self.get_later_race_ids(dict=dict)
-        if 0 < len(list):
-            return self.get_race_odds(dict[list[0]])
+        race_id = self.get_later_race_ids(dict=dict)
+        print(race_id)
+        return self.get_race_odds(race_id)
