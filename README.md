@@ -8,7 +8,7 @@ Python 3.5.1
 ### install
 enter below commands
 
-```sudo pip install git+https://github.com/PinkPhayate/oddsman```
+```sudo pip install git+https://github.com/PinkPhayate/oddsman@master```
 
 ### how to use
 ```
