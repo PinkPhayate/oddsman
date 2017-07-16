@@ -41,6 +41,8 @@ class OddsWatcher(object):
         return dict
 
     def __find_race_time(self, div):
+        for dv in div.findAll('strong', ''):
+            div.find('strong').extract()
         text = div.text
         time = self.__extract_time(text)
         if time is not None:
