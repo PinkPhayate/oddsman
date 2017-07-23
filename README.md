@@ -1,4 +1,4 @@
-# OddsWacther
+# Oddsman
 
 ## Environment
 Python 3.5.1
