@@ -1,16 +1,22 @@
 # Oddsman
 
+## Overview
+This is module implemented by python to display rate of house rasing.
+
+Document is until not ready.
+
+
 ## Environment
-Python 3.5.1
 
-## Usage
+- Python 3.5.1
+- Dependent module are shown in requirement.txt
 
-### install
+## install
 enter below commands
 
 ```sudo pip install git+https://github.com/PinkPhayate/oddsman@master```
 
-### how to use
+## useage
 ```
 from oddsman import oddsman
 ods = oddsman.OddsWatcher()
